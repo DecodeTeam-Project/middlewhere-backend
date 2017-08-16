@@ -1,6 +1,6 @@
 const express = require('express');
-
 const onlyLoggedIn = require('../lib/only-logged-in');
+var md5 = require('md5'); // for hashing emails for Gravatar
 
 module.exports = (dataLoader) => {
   const tasksController = express.Router();
@@ -66,7 +66,6 @@ module.exports = (dataLoader) => {
       if (req.body && req.body.assigneeId){
         assigneeId=req.body.assigneeId;
       };
-      console.log('70 t.js ' , assigneeId);
       dataLoader.getAllProjectsForTask(taskId)
       .then(project_Id => {
         console.log(project_Id);
@@ -84,6 +83,15 @@ module.exports = (dataLoader) => {
     const taskId = req.params.id;
     dataLoader.getAllUsersForTask(taskId)
     .then(users => {
+
+      users.map(user=> {
+        const email = user.email;
+        const HASH = md5(email);
+        const hashed = "https://www.gravatar.com/avatar/"+HASH;
+        user.avatarUrl = hashed;
+        return user;
+      });
+
       console.log(users);
       return res.json(users)
     })

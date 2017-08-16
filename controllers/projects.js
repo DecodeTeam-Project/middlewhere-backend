@@ -13,7 +13,7 @@ module.exports = (dataLoader) => {
     .catch(err => res.status(400).json(err));
   });
 
-  // RETRIEVE
+  // RETRIEVE THE DATA OF A SINNGLE PROJECT
   projectsController.get('/:id', (req, res) => {
     dataLoader.getSingleProject(req.params.id)
     .then(data => res.json(data))
@@ -80,7 +80,6 @@ module.exports = (dataLoader) => {
     const task_data = {
       projectId: project_id,
       title: req.body.title,
-      url: req.body.url,
       description: req.body.description,
       deadline: req.body.deadline,
       priority: req.body.priority
