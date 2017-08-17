@@ -9,6 +9,10 @@ module.exports = (dataLoader) => {
 
   projectsController.get('/', onlyLoggedIn, (req, res) => {
     dataLoader.getAllProjects(req.user.users_id) // we're getting the user all his projects
+    .then(tData => {
+      console.log(tData);
+      return(tData);
+    })
     .then(data => res.json(data))
     .catch(err => res.status(400).json(err));
   });
@@ -19,7 +23,6 @@ module.exports = (dataLoader) => {
     .then(data => res.json(data))
     .catch(err => res.status(400).json(err));
   });
-
 
   // Create a new project
   projectsController.post('/', onlyLoggedIn, (req, res) => {
