@@ -48,7 +48,6 @@ module.exports = (dataLoader) => {
 
 
   tasksController.patch('/:id', onlyLoggedIn, (req, res) => {
-      console.log(' ++++++ ++++++ ++++++');
       const real_user = req.user.users_id;
       dataLoader.taskBelongsToUser(req.params.id, real_user)
       .then(() => dataLoader.updateTask(req.params.id, task_data))
@@ -57,6 +56,19 @@ module.exports = (dataLoader) => {
         return res.json(data)})
       .catch(err => res.status(400).json(err));
   });
+
+  tasksController.patch('/:id/completed', onlyLoggedIn, (req, res) => {
+
+      const clicker_user = req.user.users_id;
+      var completed = req.body.completed;
+      console.log(req.body.completed);
+      dataLoader.taskBelongsToUser(req.params.id, clicker_user)
+      .then(() => dataLoader.updateTaskComplete(req.params.id, completed))
+      .then(data => {
+        return res.json(data)})
+      .catch(err => res.status(400).json(err));
+  });
+
 
 
   tasksController.post('/:taskId/assigned', onlyLoggedIn, (req, res) => {
@@ -84,7 +96,6 @@ module.exports = (dataLoader) => {
     const taskId = req.params.id;
     dataLoader.getAllUsersForTask(taskId)
     .then(users => {
-
       users.map(user=> {
         const email = user.email;
         const HASH = md5(email);
