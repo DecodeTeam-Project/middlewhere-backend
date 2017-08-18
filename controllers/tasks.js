@@ -48,12 +48,13 @@ module.exports = (dataLoader) => {
 
 
   tasksController.patch('/:id', onlyLoggedIn, (req, res) => {
+      console.log(' ++++++ ++++++ ++++++');
       const real_user = req.user.users_id;
       dataLoader.taskBelongsToUser(req.params.id, real_user)
       .then(() => dataLoader.updateTask(req.params.id, task_data))
       .then(data => {
-        console.log(data);
-      return res.json(data)})
+        console.log('tasks 55 ' ,data);
+        return res.json(data)})
       .catch(err => res.status(400).json(err));
   });
 

@@ -13,7 +13,6 @@ module.exports = (dataLoader) => {
       lastName: req.body.lastName,
       password: req.body.password
     };
-    console.log(userData);
     dataLoader.createUser(userData)
     .then(ans => {
       const email = ans.email;
