@@ -9,6 +9,10 @@ module.exports = (dataLoader) => {
 
   projectsController.get('/', onlyLoggedIn, (req, res) => {
     dataLoader.getAllProjects(req.user.users_id) // we're getting the user all his projects
+    .then(tData => {
+      console.log(" OUUUUUUJ, BARAKUDA ");
+      return(tData);
+    })
     .then(data => res.json(data))
     .catch(err => res.status(400).json(err));
   });
@@ -20,10 +24,8 @@ module.exports = (dataLoader) => {
     .catch(err => res.status(400).json(err));
   });
 
-
   // Create a new project
   projectsController.post('/', onlyLoggedIn, (req, res) => {
-    console.log('25 .. projects.js');
     project_data = {
       adminUserId: req.user.users_id,
       title: req.body.title,
@@ -38,6 +40,7 @@ module.exports = (dataLoader) => {
 
   // Modify an owned project
   projectsController.patch('/:id', onlyLoggedIn, (req, res) => {
+    console.log('projects.js 44' , req.body);
     dataLoader.projectBelongsToUser(req.params.id, req.user.users_id)
     .then( () => {
       dataLoader.updateProject(req.params.id, {
@@ -98,7 +101,9 @@ module.exports = (dataLoader) => {
     dataLoader.projectBelongsToUser(req.params.id, user_id)
     .then(() => {
       dataLoader.createTask(task_data) } )
-    .then(data => res.status(201).json(data))
+    .then(data => {
+      console.log('the response ... PROJ.js ' , data);
+      res.json(data)}) // status(201).   no response
     .catch(err => res.status(400).json(err));
     // res.status(500).json({ error: 'not implemented' });
   });
