@@ -49,21 +49,19 @@ module.exports = (dataLoader) => {
 
   tasksController.patch('/:id', onlyLoggedIn, (req, res) => {
       const real_user = req.user.users_id;
+      console.log('tasks.js 52 : ', req.params.id, real_user);
       dataLoader.taskBelongsToUser(req.params.id, real_user)
       .then(() => dataLoader.updateTask(req.params.id, task_data))
       .then(data => {
-        console.log('tasks 55 ' ,data);
         return res.json(data)})
       .catch(err => res.status(400).json(err));
   });
 
   tasksController.patch('/:id/completed', onlyLoggedIn, (req, res) => {
-
-      const clicker_user = req.user.users_id;
-      var completed = req.body.completed;
-      console.log(req.body.completed);
-      dataLoader.taskBelongsToUser(req.params.id, clicker_user)
-      .then(() => dataLoader.updateTaskComplete(req.params.id, completed))
+      return dataLoader.taskBelongsToUser(req.params.id, req.user.users_id)
+      .then(() => {
+        return dataLoader.updateTaskComplete(req.params.id, req.body.completed)
+      })
       .then(data => {
         return res.json(data)})
       .catch(err => res.status(400).json(err));
@@ -93,8 +91,7 @@ module.exports = (dataLoader) => {
 
   // RETRIEVE USERS THAT ARE ASSIGNED FOR A GIVEN TASK
   tasksController.get('/:id/assigned', onlyLoggedIn, (req, res) => {
-    const taskId = req.params.id;
-    dataLoader.getAllUsersForTask(taskId)
+    dataLoader.getAllUsersForTask(req.params.id)
     .then(users => {
       users.map(user=> {
         const email = user.email;
@@ -103,7 +100,25 @@ module.exports = (dataLoader) => {
         user.avatarUrl = hashed;
         return user;
       });
+      console.log(users);
+      return res.json(users)
+    })
+    .catch(err => res.status(400).json(err));
+  });
 
+  tasksController.post('/:id/assigned', onlyLoggedIn, (req, res) => {
+
+    var queryTerm = req.body.queryTerm;
+
+    dataLoader.assignUsersForTask(req.params.id)
+    .then(users => {
+      users.map(user=> {
+        const email = user.email;
+        const HASH = md5(email);
+        const hashed = "https://www.gravatar.com/avatar/"+HASH;
+        user.avatarUrl = hashed;
+        return user;
+      });
       console.log(users);
       return res.json(users)
     })
