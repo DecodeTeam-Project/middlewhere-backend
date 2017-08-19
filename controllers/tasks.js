@@ -7,7 +7,7 @@ module.exports = (dataLoader) => {
 
   // Modify a task
   tasksController.patch('/:id', onlyLoggedIn, (req, res) => {
-    console.log(req.body, "tasks10")
+    console.log(req.body, "this is my new consolelog")
       const task_data = {
         projectId: req.body.projectId, /// ADDED REQ..projectId
         title: req.body.title,
