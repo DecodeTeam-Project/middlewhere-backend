@@ -25,7 +25,7 @@ const tasksController = require('./controllers/tasks.js');
 // Database / data loader initialization
 const connection = mysql.createPool({
   user: 'root',
-  password: 'root',
+  password: '',
   database: 'middlewhere'
 });
 

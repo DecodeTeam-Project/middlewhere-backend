@@ -10,7 +10,6 @@ module.exports = (dataLoader) => {
   projectsController.get('/', onlyLoggedIn, (req, res) => {
     dataLoader.getAllProjects(req.user.users_id) // we're getting the user all his projects
     .then(tData => {
-      console.log(" OUUUUUUJ, BARAKUDA ");
       return(tData);
     })
     .then(data => res.json(data))
