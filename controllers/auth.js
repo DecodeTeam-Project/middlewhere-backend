@@ -88,6 +88,23 @@ module.exports = (dataLoader) => {
     .then(ans => res.status(200).json(ans))
     .catch(err => res.status(500).json({ error: 'self not implemented' }));
   });
+
+  // Retrieve current user
+  authController.get('/autocomplete/', onlyLoggedIn, (req, res) => {
+    dataLoader.retrieveUsersDynamically(req.query.queryTerm)
+    .then(ans => {
+      ans.map(one => {
+        const email = one.email;
+        const HASH = md5(email);
+        const hashed = "https://www.gravatar.com/avatar/"+HASH;
+        one.avatarUrl = hashed;
+      })
+      return ans;
+    })
+    .then(ans => res.status(200).json(ans))
+    .catch(err => res.status(500).json({ error: "can't search the term" }));
+  });
+
   //
   // authController.get('/gi', onlyLoggedIn, (req, res) => {
   //   dataLoader.retrieveUsers()
