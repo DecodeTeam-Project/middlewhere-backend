@@ -70,10 +70,10 @@ module.exports = (dataLoader) => {
 
 
 
-  tasksController.post('/:taskId/assigned', onlyLoggedIn, (req, res) => {
+  tasksController.post('/:id/assigned', onlyLoggedIn, (req, res) => {
       const userId = req.user.users_id;
       var projectId;
-      const taskId = req.params.taskId;
+      const taskId = req.params.id;
       var assigneeId = userId;
       if (req.body && req.body.assigneeId){
         assigneeId=req.body.assigneeId;
