@@ -7,11 +7,11 @@ module.exports = (dataLoader) => {
 
   // Modify a task
   tasksController.patch('/:id', onlyLoggedIn, (req, res) => {
+      console.log('tasks >>>>>>>>>>>>>>>>>>>>>>>>>>>>> \n\n');
 
       const task_data = {
-        projectId: req.body.project_id, /// ADDED REQ..projectId
+        //projectId: req.body.project_id, /// ADDED REQ..projectId
         title: req.body.title,
-        url: req.body.url,
         description: req.body.description,
         deadline: req.body.deadline,
         priority: req.body.priority
@@ -21,20 +21,23 @@ module.exports = (dataLoader) => {
         task_data.deadline=null;
       } // DAFAULT FOR DEADLINE
       if (!task_data.priority){
-        task_data.priority=null;
+        task_data.priority='normal';
       } // DAFAULT FOR PRIORITY
       if (!task_data.description){
         task_data.description='';
       } // DAFAULT FOR DESCRIPTION
 
       const real_user = req.user.users_id;
-      dataLoader.taskBelongsToUser(req.params.id, real_user)
-      .then(() => dataLoader.updateTask(req.params.id, task_data))
+      console.log("FNKJDNFKSDFNAKS " , req.body);
+      dataLoader.TaskProjectBelongsToUser(req.body.projectId, real_user)
+      .then((result) => {
+        console.log("tasks 10 YESSSSS IT BELONGS TO US ", result);
+        return dataLoader.updateTask(req.params.id, task_data);
+      })
       .then(data => {
         console.log(data);
       return res.json(data)})
       .catch(err => res.status(400).json(err));
-
   });
   // Retrieve a list of projects
   // projectsController.get('/', (req, res) => {
@@ -47,15 +50,15 @@ module.exports = (dataLoader) => {
   // });
 
 
-  tasksController.patch('/:id', onlyLoggedIn, (req, res) => {
-      const real_user = req.user.users_id;
-      console.log('tasks.js 52 : ', req.params.id, real_user);
-      dataLoader.taskBelongsToUser(req.params.id, real_user)
-      .then(() => dataLoader.updateTask(req.params.id, task_data))
-      .then(data => {
-        return res.json(data)})
-      .catch(err => res.status(400).json(err));
-  });
+  // tasksController.patch('/:id', onlyLoggedIn, (req, res) => {
+  //     const real_user = req.user.users_id;
+  //     console.log('tasks.js 52 : ', req.params.id, real_user);
+  //     dataLoader.taskBelongsToAdmin(req.params.id, real_user)
+  //     .then(() => dataLoader.updateTask(req.params.id, task_data))
+  //     .then(data => {
+  //       return res.json(data)})
+  //     .catch(err => res.status(400).json(err));
+  // });
 
   tasksController.patch('/:id/completed', onlyLoggedIn, (req, res) => {
       return dataLoader.taskBelongsToUser(req.params.id, req.user.users_id)
@@ -67,8 +70,6 @@ module.exports = (dataLoader) => {
       .catch(err => res.status(400).json(err));
   });
 
-
-
   tasksController.post('/:id/assigned', onlyLoggedIn, (req, res) => {
       const userId = req.user.users_id;
       var projectId;
@@ -79,7 +80,7 @@ module.exports = (dataLoader) => {
       };
       dataLoader.getAllProjectsForTask(taskId)
       .then(project_Id => {
-        console.log(project_Id);
+        console.log('hasvfjsgvfhsjdfvashdjfashjdf OOOO');
         dataLoader.projectBelongsToUser(project_Id, userId)
       })
       .then(() => {
@@ -106,24 +107,26 @@ module.exports = (dataLoader) => {
     .catch(err => res.status(400).json(err));
   });
 
-  tasksController.post('/:id/assigned', onlyLoggedIn, (req, res) => {
+  // tasksController.post('/:id/assigned', onlyLoggedIn, (req, res) => {
+  //   console.log('jdsabdfksbdfkhsabfkhbkdsjfbsakh');
+  //   console.log('HELLO FROM Tasks');
+  //   //console.log(req.body);
+  //   dataLoader.assignUsersForTask(req.body.assigneeId, req.params.id)
+  //   .then(users => {
+  //     users.map(user=> {
+  //       const email = user.email;
+  //       const HASH = md5(email);
+  //       const hashed = "https://www.gravatar.com/avatar/"+HASH;
+  //       user.avatarUrl = hashed;
+  //       return user;
+  //     });
+  //     console.log(users);
+  //     return res.json(users)
+  //   })
+  //   .catch(err => res.status(400).json(err));
+  // });
 
-    var queryTerm = req.body.queryTerm;
-
-    dataLoader.assignUsersForTask(req.params.id)
-    .then(users => {
-      users.map(user=> {
-        const email = user.email;
-        const HASH = md5(email);
-        const hashed = "https://www.gravatar.com/avatar/"+HASH;
-        user.avatarUrl = hashed;
-        return user;
-      });
-      console.log(users);
-      return res.json(users)
-    })
-    .catch(err => res.status(400).json(err));
-  });
+  // tasksController.get()
 
   // Delete a task
   // tasksController.delete('/:id', onlyLoggedIn, (req, res) => {

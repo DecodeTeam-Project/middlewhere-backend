@@ -97,7 +97,6 @@ module.exports = (dataLoader) => {
     if (!task_data.description){
       task_data.description='';
     } // DAFAULT FOR DESCRIPTION
-
     dataLoader.projectBelongsToUser(req.params.id, user_id)
     .then(() => {
       dataLoader.createTask(task_data) } )

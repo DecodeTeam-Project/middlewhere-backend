@@ -75,7 +75,7 @@ module.exports = (dataLoader) => {
 
   // Retrieve current user
   authController.get('/all', onlyLoggedIn, (req, res) => {
-    dataLoader.retrieveUsers()
+    dataLoader.retrieveUsers(req.user.users_id)
     .then(ans => {
       ans.map(one => {
         const email = one.email;

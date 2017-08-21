@@ -1,7 +1,7 @@
 const express = require('express');
 const mysql = require('promise-mysql');
 const cors = require('express-cors');
-
+//const socketIo = require('socket.io')
 var corsOptions = {
   origin: true,
   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
@@ -46,7 +46,29 @@ app.use(function(req, res, next) {
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(checkLoginToken(dataLoader));
-
+// const io = socketIo(server);
+// app.post('/talker', (req, res) => {
+//   const { Body, From, MediaUrl0 } = req.body
+//   const message = {
+//     body: Body,
+//     from: From.slice(8),
+//     img: MediaUrl0
+//   }
+//   io.emit('message', message)
+//   res.send(`
+//            <Response>
+//             <Message>Thanks for texting!</Message>
+//            </Response>
+//            `)
+// })
+// io.on('connection', socket => {
+//   socket.on('message', body => {
+//     socket.broadcast.emit('message', {
+//       body,
+//       from: socket.id.slice(8)
+//     })
+//   })
+// })
 
 // app.use(cors({
 //   allowedOrigins: [
