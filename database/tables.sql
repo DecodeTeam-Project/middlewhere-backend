@@ -24,6 +24,7 @@ CREATE TABLE middlewhere.`users` (
   `updatedAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 );
+ALTER TABLE users ADD status VARCHAR(20) DEFAULT 'OFFLINE';
 
 
 DROP TABLE IF EXISTS `middlewhere`.`projects` ;

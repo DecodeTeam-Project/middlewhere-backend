@@ -26,6 +26,17 @@ module.exports = (dataLoader) => {
       res.status(400).json(err)});
   });
 
+  authController.get('/avatar/:id', (req, res) => {
+  return dataLoader.getSingleUser(req.params.id)
+  .then(ans => {
+    ans[0]['avatarUrl'] = "https://www.gravatar.com/avatar/"+md5(ans[0].email);
+    return ans[0];
+  })
+  .then(user => res.status(201).json(user))
+  .catch(err => { console.log(err);
+    res.status(400).json(err)});
+  });
+
   // Create a new session (login)
   authController.post('/sessions', (req, res) => {
     dataLoader.createTokenFromCredentials(
@@ -39,6 +50,7 @@ module.exports = (dataLoader) => {
 
   // Delete a session (logout)
   authController.delete('/sessions', onlyLoggedIn, (req, res) => {
+    console.log('TRYING TO DELETE ');
       dataLoader.deleteToken(req.sessionToken)
       .then(() => res.status(204).end())
       .catch(err => res.status(400).json(err));
@@ -75,7 +87,7 @@ module.exports = (dataLoader) => {
 
   // Retrieve current user
   authController.get('/all', onlyLoggedIn, (req, res) => {
-    dataLoader.retrieveUsers()
+    dataLoader.retrieveUsers(req.user.users_id)
     .then(ans => {
       ans.map(one => {
         const email = one.email;
@@ -105,20 +117,39 @@ module.exports = (dataLoader) => {
     .catch(err => res.status(500).json({ error: "can't search the term" }));
   });
 
-  //
-  // authController.get('/gi', onlyLoggedIn, (req, res) => {
-  //   dataLoader.retrieveUsers()
-  //   .then(ans => {
-  //     ans.map(one => {
-  //       const email = one.email;
-  //       const HASH = md5(email);
-  //       const hashed = "https://www.gravatar.com/avatar/"+HASH;
-  //       one.avatarUrl = hashed;
-  //     })
-  //     return ans;
-  //   })
+  authController.patch('/resetStatus', onlyLoggedIn, (req, res) => {
+    dataLoader.resetStatus()
+    .then(ans => res.status(200).json(ans))
+    .catch(err => res.status(500).json({ error: "can't search the term" }));
+  });
+
+
+
+  // GET THE STATUS OF A GIVEN USER
+  authController.get('/:id/status/', onlyLoggedIn, (req, res) => {
+    dataLoader.getStatus(req.params.id)
+    .then(ans => {
+      console.log(ans[0]);
+      if (ans.length>0){
+        if (ans[0].status==null){
+          return 'ONLINE'
+        } else {
+          return ans[0].status
+        }
+      } else {
+        return 'OFFLINE'
+      }
+    })
+    .then(ans => res.status(200).json(ans))
+    .catch(err => res.status(500).json({ error: "can't search the term" }));
+  });
+
+  // UPDATE THE STATUS OF A GIVEN USER
+  // authController.patch('/:id/status/', (req, res) => {
+  //   dataLoader.setUserStatus(req.params.id, req.body.status)
   //   .then(ans => res.status(200).json(ans))
-  //   .catch(err => res.status(500).json({ error: 'self not implemented' }));
+  //   .catch(err => res.status(500).json({ error: "can't search the term" }));
   // });
+
   return authController;
 };
