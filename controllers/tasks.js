@@ -39,15 +39,6 @@ module.exports = (dataLoader) => {
       return res.json(data)})
       .catch(err => res.status(400).json(err));
   });
-  // Retrieve a list of projects
-  // projectsController.get('/', (req, res) => {
-  //   dataLoader.getAllprojects({
-  //     page: req.query.page,
-  //     limit: req.query.count
-  //   })
-  //   .then(data => res.json(data))
-  //   .catch(err => res.status(400).json(err));
-  // });
 
 
   // tasksController.patch('/:id', onlyLoggedIn, (req, res) => {
@@ -60,11 +51,21 @@ module.exports = (dataLoader) => {
   //     .catch(err => res.status(400).json(err));
   // });
 
+  // CHANGE TASK COMPLETION STATUS IF IT BELONGS TO USER
   tasksController.patch('/:id/completed', onlyLoggedIn, (req, res) => {
+    console.log('KKKKKKKKK TASKS.JS');
       return dataLoader.taskBelongsToUser(req.params.id, req.user.users_id)
       .then(() => {
+        console.log('OOOOOKKKKK TASKS.JS');
         return dataLoader.updateTaskComplete(req.params.id, req.body.completed)
       })
+      .then(data => {
+        return res.json(data)})
+      .catch(err => res.status(400).json(err));
+  });
+  // SEE IF THE TASKS BELONGS TO USER
+  tasksController.get('/:id/completed', onlyLoggedIn, (req, res) => {
+      return dataLoader.taskBelongsToUser(req.params.id, req.user.users_id)
       .then(data => {
         return res.json(data)})
       .catch(err => res.status(400).json(err));
@@ -84,8 +85,10 @@ module.exports = (dataLoader) => {
         dataLoader.projectBelongsToUser(project_Id, userId)
       })
       .then(() => {
+        console.log("TASKS 88 , here we go");
         return dataLoader.assignUsersForTask(assigneeId, taskId);})
       .then(data => {
+        console.log("TASKS 91 , here we go");
         return res.json(data[0])})
       .catch(err => res.status(400).json(err));
   });
