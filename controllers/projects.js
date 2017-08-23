@@ -12,6 +12,7 @@ module.exports = (dataLoader) => {
     req.body.output_limit?limit_output=req.body.output_limit:null;
     dataLoader.getAllProjects(req.user.users_id) // we're getting the user all his projects
     .then(tData => {
+
       console.log("GOT HERE IN PROJECTS.JS");
       if (limit_output) {
         console.log("GOT HERE IN PROJECTS.JS");
@@ -19,6 +20,7 @@ module.exports = (dataLoader) => {
           tData = tData.slice(0,limit_output);
         }
       }
+
       return(tData);
     })
     .then(data => res.json(data))

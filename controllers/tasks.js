@@ -7,15 +7,17 @@ module.exports = (dataLoader) => {
 
   // Modify a task
   tasksController.patch('/:id', onlyLoggedIn, (req, res) => {
-      console.log('tasks >>>>>>>>>>>>>>>>>>>>>>>>>>>>> \n\n');
 
+    console.log(req.body, "this is my new consolelog")
       const task_data = {
-        //projectId: req.body.project_id, /// ADDED REQ..projectId
+        projectId: req.body.projectId, /// ADDED REQ..projectId
+
         title: req.body.title,
         description: req.body.description,
         deadline: req.body.deadline,
         priority: req.body.priority
       }
+
 
       if (!task_data.deadline){
         task_data.deadline=null;
@@ -28,6 +30,7 @@ module.exports = (dataLoader) => {
       } // DAFAULT FOR DESCRIPTION
 
       const real_user = req.user.users_id;
+
       console.log("FNKJDNFKSDFNAKS " , req.body);
       dataLoader.TaskProjectBelongsToUser(req.body.projectId, real_user)
       .then((result) => {
@@ -38,6 +41,7 @@ module.exports = (dataLoader) => {
         console.log(data);
       return res.json(data)})
       .catch(err => res.status(400).json(err));
+
   });
 
 
