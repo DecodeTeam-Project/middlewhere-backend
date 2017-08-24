@@ -7,13 +7,17 @@ module.exports = (dataLoader) => {
 
   // Modify a task
   tasksController.patch('/:id', onlyLoggedIn, (req, res) => {
+
+    console.log(req.body, "this is my new consolelog")
       const task_data = {
-        //projectId: req.body.project_id, /// ADDED REQ..projectId
+        projectId: req.body.projectId, /// ADDED REQ..projectId
+         master
         title: req.body.title,
         description: req.body.description,
         deadline: req.body.deadline,
         priority: req.body.priority
       }
+
 
       if (!task_data.deadline){
         task_data.deadline=null;
@@ -26,13 +30,34 @@ module.exports = (dataLoader) => {
       } // DAFAULT FOR DESCRIPTION
 
       const real_user = req.user.users_id;
-      dataLoader.TaskProjectBelongsToUser(req.body.projectId, real_user)
-      .then((result) => {
-        return dataLoader.updateTask(req.params.id, task_data);
-      })
+
+
+      dataLoader.projectBelongsToUser(req.body.projectId, real_user)
+      .then(() => {
+        dataLoader.updateTask(req.params.id, task_data)})
       .then(data => {
-        console.log(data);
-      return res.json(data)})
+        return res.json(data)})
+      .catch(err => res.status(400).send(err.stack));
+
+  });
+  // Retrieve a list of projects
+  // projectsController.get('/', (req, res) => {
+  //   dataLoader.getAllprojects({
+  //     page: req.query.page,
+  //     limit: req.query.count
+  //   })
+  //   .then(data => res.json(data))
+  //   .catch(err => res.status(400).json(err));
+  // });
+
+
+  tasksController.patch('/:id', onlyLoggedIn, (req, res) => {
+      const real_user = req.user.users_id;
+      console.log('tasks.js 52 : ', req.params.id, real_user);
+      dataLoader.taskBelongsToUser(req.params.id, real_user)
+      .then(() => dataLoader.updateTask(req.params.id, task_data))
+      .then(data => {
+        return res.json(data)})
       .catch(err => res.status(400).json(err));
   });
 
