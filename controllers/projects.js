@@ -11,9 +11,7 @@ module.exports = (dataLoader) => {
     req.body.output_limit?limit_output=req.body.output_limit:null;
     dataLoader.getAllProjects(req.user.users_id) // we're getting the user all his projects
     .then(tData => {
-      console.log("GOT HERE IN PROJECTS.JS");
       if (limit_output) {
-        console.log("GOT HERE IN PROJECTS.JS");
         if (tData.length > limit_output){
           tData = tData.slice(0,limit_output);
         }
@@ -47,7 +45,6 @@ module.exports = (dataLoader) => {
 
   // Modify an owned project
   projectsController.patch('/:id', onlyLoggedIn, (req, res) => {
-    console.log('projects.js 44' , req.body);
     dataLoader.projectBelongsToUser(req.params.id, req.user.users_id)
     .then( () => {
       dataLoader.updateProject(req.params.id, {
@@ -77,13 +74,9 @@ module.exports = (dataLoader) => {
   // Retrieve all the tasks for a single project
   projectsController.get('/:id/tasks', (req, res) => {
     const this_project_id = req.params.id;
-    dataLoader.getAllTasksForProject(this_project_id) //, req.user.users_id
-    // .then(data=> {
-    //   data
-    // })
-    .then(data => res.json(data)) //data.filter()
+    dataLoader.getAllTasksForProject(this_project_id)
+    .then(data => res.json(data))
     .catch(err => res.status(400).json(err));
-    // res.status(500).json({ error: 'not implemented' });
   });
 
   // Create a new task under a project
@@ -111,7 +104,6 @@ module.exports = (dataLoader) => {
     .then(() => {
       dataLoader.createTask(task_data) } )
     .then(data => {
-      console.log('the response ... PROJ.js ' , data);
       res.json(data)}) // status(201).   no response
     .catch(err => res.status(400).json(err));
     // res.status(500).json({ error: 'not implemented' });

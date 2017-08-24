@@ -50,29 +50,13 @@ module.exports = (dataLoader) => {
 
   // Delete a session (logout)
   authController.delete('/sessions', onlyLoggedIn, (req, res) => {
-    console.log('TRYING TO DELETE ');
       dataLoader.deleteToken(req.sessionToken)
       .then(() => res.status(204).end())
       .catch(err => res.status(400).json(err));
   });
 
-
-  // authController.delete('/sessions', onlyLoggedIn, (req, res) => {
-  //   console.log('ST: ', req.sessionToken, ' BT: ', req.body.token);
-  //   console.log('req body :: ', req.body); //
-  //   if (req.sessionToken === req.body.token) {
-  //     dataLoader.deleteToken(req.body.token)
-  //     .then(() => res.status(204).end())
-  //     .catch(err => res.status(400).json(err));
-  //   } else {
-  //     res.status(401).json({ error: 'Invalid session token' });
-  //   } //
-  // });
-
-
   // Retrieve current user
   authController.get('/me', onlyLoggedIn, (req, res) => {
-    // console.log('60' , req.sessionToken);
     dataLoader.getUserFromSession(req.sessionToken)
     .then(ans => {
       const email = ans.users_email;
@@ -129,7 +113,6 @@ module.exports = (dataLoader) => {
   authController.get('/:id/status/', onlyLoggedIn, (req, res) => {
     dataLoader.getStatus(req.params.id)
     .then(ans => {
-      console.log(ans[0]);
       if (ans.length>0){
         if (ans[0].status==null){
           return 'ONLINE'
@@ -143,13 +126,6 @@ module.exports = (dataLoader) => {
     .then(ans => res.status(200).json(ans))
     .catch(err => res.status(500).json({ error: "can't search the term" }));
   });
-
-  // UPDATE THE STATUS OF A GIVEN USER
-  // authController.patch('/:id/status/', (req, res) => {
-  //   dataLoader.setUserStatus(req.params.id, req.body.status)
-  //   .then(ans => res.status(200).json(ans))
-  //   .catch(err => res.status(500).json({ error: "can't search the term" }));
-  // });
 
   return authController;
 };
