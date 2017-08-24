@@ -60,9 +60,7 @@ app.use(function(req, res, next) {
 const server = http.createServer(app);
 const io = socketIo(server);
 io.on('connection', socket => { // on connection to the sitting-arounder io
-  console.log('I 59');
   socket.on('message', body => {
-    console.log('I 61', body);
 
     const response = body;
     response['time'] = new Date();

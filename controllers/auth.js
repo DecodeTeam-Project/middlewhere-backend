@@ -69,7 +69,7 @@ module.exports = (dataLoader) => {
     .catch(err => res.status(500).json({ error: 'self not implemented' }));
   });
 
-  // Retrieve current user
+  // RETRIEVE ALL USERS THAT ARE COWORKERS WITH THE CURRENT USER
   authController.get('/all', onlyLoggedIn, (req, res) => {
     dataLoader.retrieveUsers(req.user.users_id)
     .then(ans => {
@@ -85,7 +85,7 @@ module.exports = (dataLoader) => {
     .catch(err => res.status(500).json({ error: 'self not implemented' }));
   });
 
-  // Retrieve current user
+  // RETRIEVE USER IN SEARCH BAR FOR TASK ASSIGNMENT
   authController.get('/autocomplete/', onlyLoggedIn, (req, res) => {
     dataLoader.retrieveUsersDynamically(req.query.queryTerm)
     .then(ans => {
