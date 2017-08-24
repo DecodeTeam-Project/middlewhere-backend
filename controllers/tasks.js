@@ -53,19 +53,19 @@ module.exports = (dataLoader) => {
 
   // CHANGE TASK COMPLETION STATUS IF IT BELONGS TO USER
   tasksController.patch('/:id/completed', onlyLoggedIn, (req, res) => {
-    console.log('KKKKKKKKK TASKS.JS');
       return dataLoader.taskBelongsToUser(req.params.id, req.user.users_id)
       .then(() => {
-        console.log('OOOOOKKKKK TASKS.JS');
         return dataLoader.updateTaskComplete(req.params.id, req.body.completed)
       })
       .then(data => {
+        console.log("TASKS 61 " , data);
         return res.json(data)})
       .catch(err => res.status(400).json(err));
   });
-  // SEE IF THE TASKS BELONGS TO USER
+
+
   tasksController.get('/:id/completed', onlyLoggedIn, (req, res) => {
-      return dataLoader.taskBelongsToUser(req.params.id, req.user.users_id)
+      return dataLoader.taskIsCompleted(req.params.id)
       .then(data => {
         return res.json(data)})
       .catch(err => res.status(400).json(err));
@@ -93,7 +93,7 @@ module.exports = (dataLoader) => {
       .catch(err => res.status(400).json(err));
   });
 
-  // RETRIEVE USERS THAT ARE ASSIGNED FOR A GIVEN TASK
+  // RETRIEVE USERS THAT ARE ASSIGNED FOR A GIVEN TASK *******
   tasksController.get('/:id/assigned', onlyLoggedIn, (req, res) => {
     dataLoader.getAllUsersForTask(req.params.id)
     .then(users => {
@@ -104,7 +104,7 @@ module.exports = (dataLoader) => {
         user.avatarUrl = hashed;
         return user;
       });
-      console.log(users);
+      console.log("OOOOOOOO OOOOOO " ,users);
       return res.json(users)
     })
     .catch(err => res.status(400).json(err));

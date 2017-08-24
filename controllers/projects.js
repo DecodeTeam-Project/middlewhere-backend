@@ -6,7 +6,6 @@ module.exports = (dataLoader) => {
   const projectsController = express.Router();
 
   // GET ALL THE PROJECTS FOR THE USER WITH ProgressPct FOR CURRENT USER
-
   projectsController.get('/', onlyLoggedIn, (req, res) => {
     var limit_output;
     req.body.output_limit?limit_output=req.body.output_limit:null;
@@ -78,8 +77,11 @@ module.exports = (dataLoader) => {
   // Retrieve all the tasks for a single project
   projectsController.get('/:id/tasks', (req, res) => {
     const this_project_id = req.params.id;
-    dataLoader.getAllTasksForProject(this_project_id)
-    .then(data => res.json(data))
+    dataLoader.getAllTasksForProject(this_project_id) //, req.user.users_id
+    // .then(data=> {
+    //   data
+    // })
+    .then(data => res.json(data)) //data.filter()
     .catch(err => res.status(400).json(err));
     // res.status(500).json({ error: 'not implemented' });
   });
