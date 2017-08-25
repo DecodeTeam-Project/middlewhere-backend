@@ -6,10 +6,18 @@ module.exports = (dataLoader) => {
   const projectsController = express.Router();
 
   // GET ALL THE PROJECTS FOR THE USER WITH ProgressPct FOR CURRENT USER
-
   projectsController.get('/', onlyLoggedIn, (req, res) => {
+    var limit_output;
+    req.body.output_limit?limit_output=req.body.output_limit:null;
     dataLoader.getAllProjects(req.user.users_id) // we're getting the user all his projects
     .then(tData => {
+
+      if (limit_output) {
+        if (tData.length > limit_output){
+          tData = tData.slice(0,limit_output);
+        }
+      }
+
       return(tData);
     })
     .then(data => res.json(data))
@@ -39,7 +47,6 @@ module.exports = (dataLoader) => {
 
   // Modify an owned project
   projectsController.patch('/:id', onlyLoggedIn, (req, res) => {
-    console.log('projects.js 44' , req.body);
     dataLoader.projectBelongsToUser(req.params.id, req.user.users_id)
     .then( () => {
       dataLoader.updateProject(req.params.id, {
@@ -72,7 +79,6 @@ module.exports = (dataLoader) => {
     dataLoader.getAllTasksForProject(this_project_id)
     .then(data => res.json(data))
     .catch(err => res.status(400).json(err));
-    // res.status(500).json({ error: 'not implemented' });
   });
 
   // Create a new task under a project
@@ -96,12 +102,10 @@ module.exports = (dataLoader) => {
     if (!task_data.description){
       task_data.description='';
     } // DAFAULT FOR DESCRIPTION
-
     dataLoader.projectBelongsToUser(req.params.id, user_id)
     .then(() => {
       dataLoader.createTask(task_data) } )
     .then(data => {
-      console.log('the response ... PROJ.js ' , data);
       res.json(data)}) // status(201).   no response
     .catch(err => res.status(400).json(err));
     // res.status(500).json({ error: 'not implemented' });

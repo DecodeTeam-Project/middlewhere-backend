@@ -16,7 +16,16 @@
 --
 
 -- user Table Data
-INSERT INTO `users` (`email`,`firstName`,`lastName`,`password`) VALUES ("lacus.Mauris@vitaeposuere.edu","Destiny","Sheppard","CWX60RIT9MV"),("et@Donecsollicitudinadipiscing.co.uk","Linus","Baker","DYB49ZBL6OU"),("quis.lectus.Nullam@aliquet.edu","Xander","Peck","IKJ95RLE0CU"),("eu.eros.Nam@primisin.net","Sydney","Lamb","DWR78GYL0IW"),("fermentum.metus.Aenean@nuncinterdum.net","Callum","Blair","MZY60WPU9DX"),("lobortis@nonarcuVivamus.net","Preston","Downs","UFB99CNQ0DT"),("sed@Nullamenim.ca","Susan","Whitfield","JPV78OVI1VN"),("nunc.nulla@urnaVivamusmolestie.org","Alexis","Soto","EHZ20LQL5UC"),("Proin.ultrices.Duis@Donecfeugiatmetus.net","Chase","Albert","MPF65AII6ON"),("Vivamus@odioauctor.edu","Bethany","Bradshaw","VHJ75IVY4AZ");
+INSERT INTO `users` (`email`,`firstName`,`lastName`,`password`) VALUES ("lacus.Mauris@vitaeposuere.edu","Destiny","Sheppard","CWX60RIT9MV"),
+("et@Donecsollicitudinadipiscing.co.uk","Linus","Baker","DYB49ZBL6OU"),
+("quis.lectus.Nullam@aliquet.edu","Xander","Peck","IKJ95RLE0CU"),
+("eu.eros.Nam@primisin.net","Sydney","Lamb","DWR78GYL0IW"),
+("fermentum.metus.Aenean@nuncinterdum.net","Callum","Blair","MZY60WPU9DX"),
+("lobortis@nonarcuVivamus.net","Preston","Downs","UFB99CNQ0DT"),
+("sed@Nullamenim.ca","Susan","Whitfield","JPV78OVI1VN"),
+("nunc.nulla@urnaVivamusmolestie.org","Alexis","Soto","EHZ20LQL5UC"),
+("Proin.ultrices.Duis@Donecfeugiatmetus.net","Chase","Albert","MPF65AII6ON"),
+("Vivamus@odioauctor.edu","Bethany","Bradshaw","VHJ75IVY4AZ");
 
 -- projects Table Data
 INSERT INTO `projects` (`title`,`description`,`adminUserId`,`deadline`) VALUES ("sapien.","Lorem ipsum dolor sit amet, consectetuer adipiscing",7,"2018-08-02 19:33:01"),("dui,","Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Curabitur sed",3,"2017-10-13 19:32:59"),("montes,","Lorem",2,"2018-03-06 09:51:53");
