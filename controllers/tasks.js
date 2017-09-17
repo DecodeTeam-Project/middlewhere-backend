@@ -10,8 +10,7 @@ module.exports = (dataLoader) => {
 
     console.log(req.body, "this is my new consolelog")
       const task_data = {
-        projectId: req.body.projectId, /// ADDED REQ..projectId
-         master
+        projectId: req.body.projectId, 
         title: req.body.title,
         description: req.body.description,
         deadline: req.body.deadline,
